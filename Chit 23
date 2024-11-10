@@ -1,0 +1,43 @@
+1. List the titles of all movies directed by 'Hitchcock'.
+
+SELECT Mov_Title 
+FROM MOVIES 
+WHERE Dir_id = (SELECT Dir_id FROM DIRECTOR WHERE Dir_Name = 'Hitchcock');
+2. Find the movie names where one or more actors acted in two or more movies.
+
+SELECT Mov_Title 
+FROM MOVIES
+WHERE Mov_id IN (
+    SELECT Mov_id 
+    FROM MOVIE_CAST 
+    GROUP BY Act_id, Mov_id 
+    HAVING COUNT(DISTINCT Mov_id) > 1
+);
+3. List all actors who acted in a movie before 2000 and also in a movie after 2015.
+
+SELECT DISTINCT Act_Name 
+FROM ACTOR
+JOIN MOVIE_CAST ON ACTOR.Act_id = MOVIE_CAST.Act_id
+JOIN MOVIES ON MOVIE_CAST.Mov_id = MOVIES.Mov_id
+WHERE MOVIES.Mov_Year < 2000
+AND ACTOR.Act_id IN (
+    SELECT Act_id 
+    FROM MOVIE_CAST 
+    JOIN MOVIES ON MOVIE_CAST.Mov_id = MOVIES.Mov_id
+    WHERE MOVIES.Mov_Year > 2015
+);
+4. Find the title of movies and number of stars for each movie that has at least one rating, sorted by movie title.
+
+SELECT Mov_Title, Rev_Stars 
+FROM MOVIES 
+JOIN RATING ON MOVIES.Mov_id = RATING.Mov_id
+ORDER BY Mov_Title;
+5. Update rating of all movies directed by 'Steven Spielberg' to 5.
+
+UPDATE RATING 
+SET Rev_Stars = 5
+WHERE Mov_id IN (
+    SELECT Mov_id 
+    FROM MOVIES 
+    WHERE Dir_id = (SELECT Dir_id FROM DIRECTOR WHERE Dir_Name = 'Steven Spielberg')
+);
