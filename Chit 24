@@ -1,0 +1,21 @@
+1.Modify Database: Update Company Location (e.g., ABC to Pune):
+
+UPDATE Company SET city = 'Pune' WHERE cname = 'ABC';
+10% Raise for Managers of "Mbank":
+
+2. 10% raise
+
+UPDATE Manager
+JOIN Emp ON Manager.emp_id = Emp.emp_id
+SET Emp.salary = Emp.salary * 1.10
+WHERE Manager.mgrname = 'Mbank';
+Find Employees Working at "Bosch" in Pune:
+
+3. employee at bosch
+SELECT ename FROM Works
+JOIN Company ON Works.c_id = Company.c_id
+WHERE Company.cname = 'Bosch' AND Company.city = 'Pune';
+Delete works Records for "SBC Company" Employees with Salary > 50,000:
+
+4. delete record for sbc
+DELETE FROM Works WHERE c_id = (SELECT c_id FROM Company WHERE cname = 'SBC') AND sal > 50000
